@@ -1,0 +1,10 @@
+/backend/data/
+/backend/myapp/.bundle
+/backend/myapp/Gemfile.lock
+/backend/myapp/log/*
+/backend/myapp/tmp/*
+/backend/myapp/node_modules
+/backend/myapp/yarn-error.log
+/backend/myapp/public/assets
+/backend/myapp.byebug_history
+/backend/myapp/config/master.key

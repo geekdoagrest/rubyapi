@@ -1,0 +1,21 @@
+Documentation:
+ Enabled: false
+
+Metrics/BlockLength:
+ Enabled: true
+ Exclude:
+   - spec/**/*
+
+Metrics/LineLength:
+ Max: 105
+
+AllCops:
+ Exclude:
+   - '**/Rakefile'
+   - 'vendor/**/*'
+   - 'spec/fixtures/**/*'
+   - 'spec/*_helper.rb'
+   - 'tmp/**/*'
+   - 'bin/**/*'
+   - 'db/**/*'
+   - 'config/**/*'

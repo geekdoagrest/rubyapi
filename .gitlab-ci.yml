@@ -1,0 +1,42 @@
+stages:
+    - build
+    - test     
+    - deploy
+    
+Gulp:
+    stage: build
+    image: node:8
+    tags: [docker]
+    script:
+        - cd frontend/
+        - npm install
+        - node_modules/gulp/bin/gulp.js build
+    artifacts:
+        expire_in: 1 month
+        paths:
+            - dist/
+Test:
+    stage: test
+    services:  
+      - docker:dind 
+    image: tmaier/docker-compose:latest
+    script:
+        - cd frontend/test
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker-compose up --abort-on-container-exit
+    artifacts:
+        expire_in: 1 month
+        paths:
+            - dist/   
+            
+Production S3 Upload:
+    stage: deploy
+    image: garland/aws-cli-docker
+    variables:
+        GIT_STRATEGY: none
+    tags: [docker]
+    only:
+        - master
+    script:
+        - aws s3 sync frontend/dist/js s3://ruby-api/js --cache-control "max-age=10800,s-maxage=600,stale-while-revalidate=10800,public" --acl public-read --content-type text/javascript --no-progress
+        - aws s3 sync frontend/dist/css s3://ruby-api/css --cache-control "max-age=10800,s-maxage=600,stale-while-revalidate=10800,public" --acl public-read --content-type text/css --no-progress
